@@ -19,6 +19,12 @@ def haversine_dist(lon1, lat1, lon2, lat2, r=6368137):
     )
 
 
+def compare(a,b):
+    if a is None:
+        return False
+    else:
+        return a <= b
+
 def find_close_images(df, thresh=2):
     """
     Find images that are within some threshold of
@@ -33,5 +39,13 @@ def find_close_images(df, thresh=2):
     r = haversine_dist(df_sort.lon.values[1:], df_sort.lat.values[1:],
                   df_sort.lon.values[:-1], df_sort.lat.values[:-1])
     df_sort["r"] = np.concatenate([np.array([np.NAN]), r])
-    return df_sort[df_sort.r.values <= thresh]
+    return df_sort[df_sort.r.apply(lambda v: compare(v, thresh))]
+
+
+
+
+
+
+
+
     
