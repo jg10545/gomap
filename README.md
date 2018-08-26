@@ -45,6 +45,8 @@ python prune.py /path/to/DCIM/ --thresh 5
 
 ## `map.py`
 
+![map example](docs/map_example.png)
+
 Map out the locations where images have been taken. 
 
 ### Usage
