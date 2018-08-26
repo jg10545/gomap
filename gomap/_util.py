@@ -1,5 +1,19 @@
 import numpy as np
+import os
 
+def gather_images(root, imtype="jpg"):
+    """
+    Recursively find all the images within a root directory. Returns
+    a list of strings.
+    
+    :root: string; path to root directory
+    """
+    imfiles = []
+    for root, directories, filenames in os.walk("DCIM/"):
+        for filename in filenames:
+            if imtype in filename.lower():
+                imfiles.append(os.path.join(root, filename))
+    return imfiles
 
 def haversine_dist(lon1, lat1, lon2, lat2, r=6368137):
     """

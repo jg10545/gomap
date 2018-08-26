@@ -4,7 +4,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from dateutil.parser import parse
 
-
+import multiprocessing as mp
 
 def get_exif_data(image):
     """
@@ -72,3 +72,13 @@ def exif_df(filenames):
     pandas DataFrame
     """
     return pd.DataFrame([retrieve_data(f) for f in filenames])
+
+
+def exif_df_mp(filenames):
+    """
+    Load metadata for a list of file paths into a single
+    pandas DataFrame
+    """
+    pool = mp.Pool(processes=mp.cpu_count())
+    #return pd.DataFrame([retrieve_data(f) for f in filenames])
+    return pd.DataFrame(list(pool.map(retrieve_data, filenames)))

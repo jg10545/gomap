@@ -14,16 +14,19 @@ import gomap
 
 def main(f, t):
     # find a list of folders
-    folders = [d.strip() for d in f.split(",")]
+    #folders = [d.strip() for d in f.split(",")]
     # get a list of all the image files in every folder
     print("Finding all the images...")
-    imfiles = []
-    for f in folders:
-        imfiles += [f + x for x in os.listdir(f) if "jpg" in x.lower()]
+    imfiles = gomap.gather_images(f)
+    #for f in folders:
+    #    imfiles += [f + x for x in os.listdir(f) if "jpg" in x.lower()]
         
     # extract metadata
     print("Extracting metadata...")
-    df = gomap.exif_df(imfiles)
+    try:
+        df = gomap.exif_df_mp(imfiles)
+    except:
+        df = gomap.exif_df(imfiles)
     print("%s images found"%len(df))
     # find the images that are too close together
     close = gomap.find_close_images(df, t)
@@ -50,8 +53,8 @@ def main(f, t):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Prune one or more directories of images")
-    parser.add_argument("folders", type=str, help="comma-delimited list of directories to check")
+    parser.add_argument("folder", type=str, help="top-level directory to search through for images")
     parser.add_argument("--thresh", type=float, help="pruning distance (in radii)", default=2)
     args = parser.parse_args()
     
-    main(args.folders, args.thresh)
+    main(args.folder, args.thresh)
